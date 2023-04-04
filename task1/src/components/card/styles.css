@@ -1,0 +1,23 @@
+.card {
+  box-shadow: 2px 2px 2px #cccccc;
+  border-radius: 7px;
+  margin: 50px;
+  display: flex;
+  justify-content: start;
+}
+img {
+  border-radius: 9px;
+  height: 140px;
+  width: 200px;
+  margin-left: 5px;
+}
+.card-text{
+ margin-left:15px;
+}
+.card{
+  display: flex;
+  flex-direction: row;
+}
+.card:hover {
+  box-shadow: 5px 5px 5px #474545;
+}

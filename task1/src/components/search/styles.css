@@ -1,0 +1,17 @@
+.input {
+  border-radius: 17px 0px 0px 17px;
+  border: 1.5px solid #d1c6c5;
+  height: 35px;
+  border-right: 0px;
+  width: 620px;
+  margin-left: 100px;
+  font-size: 1.2em;
+  margin-top: 3px;
+}
+.btn-search {
+  border: 1.5px solid #d1c6c5;
+  border-radius: 0px 17px 17px 0px;
+  height: 39px;
+  width: 55px;
+ 
+}
