@@ -1,9 +1,9 @@
 import "./styles.css";
 export default function Card(props) {
-  const date = props.date.substring(0, 4);
+  const date = props.publishTime.substring(0, 4);
   return (
     <div className="card">
-      <img src={props.img} />
+      <img src={props.imgSrc} />
       <div className="card-text">
       <h3 className="title">{props.title}</h3>
       <p>{props.description}</p>

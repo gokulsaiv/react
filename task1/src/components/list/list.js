@@ -9,8 +9,8 @@ export default function List(props) {
         key={card.id.videoId}
         title={card.snippet.channelTitle}
         description={card.snippet.description}
-        date={card.snippet.publishTime}
-        img={card.snippet.thumbnails.medium.url}
+        publishTime={card.snippet.publishTime}
+        imgSrc={card.snippet.thumbnails.medium.url}
       />
     );
   });

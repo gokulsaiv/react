@@ -1,12 +1,12 @@
 import "./styles.css";
 import React, { useState } from "react";
 export default function SearchBar(props) {
-  const [query, setState] = React.useState("");
+  const [query, setQuery] = React.useState("");
   function handleInputChange(event) {
-    setState(event.target.value);
+    setQuery(event.target.value);
   }
   function handleClick() {
-    props.handlestate(query);
+    props.handleSearchOnChange(query);
   }
 
   return (

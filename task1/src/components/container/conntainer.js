@@ -2,70 +2,65 @@ import React from "react";
 import SearchBar from "../search/search_bar.js";
 import List from "../list/list.js";
 import Pagination from "../pagination/pagination-btn.js";
+import API_KEY from "../../constants.js";
 
-const API_KEY = process.env.REACT_APP_API_KEY;
 
 export default class Container extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       query: "",
-      url: `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&type=video&part=snippet&maxResults=15&q=`,
-      ytApiData: [],
+
+      items: [],
       nextPageToken: "",
       prevPageToken: "",
     };
-    this.handleQueryState = this.handleQueryState.bind(this);
-    this.setStateNextToken = this.setStateNextToken.bind(this);
-    this.setStatePrevToken = this.setStatePrevToken.bind(this);
+    this.handleSearchOnChange = this.handleSearchOnChange.bind(this);
+    this.handleNextPageClick = this.handleNextPageClick.bind(this);
+    this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this);
   }
-  setStateNextToken() {
-    this.setState({
-      url: `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&type=video&part=snippet&maxResults=15&q=${this.state.query}&pageToken=${this.state.nextPageToken}`,
-    });
+  handleNextPageClick() {
+    const urlLink = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&type=video&part=snippet&maxResults=15&q=${this.state.query}&pageToken=${this.state.nextPageToken}`;
+    this.fetchData(urlLink);
   }
-  setStatePrevToken() {
-    this.setState({
-      url: `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&type=video&part=snippet&maxResults=15&q=${this.state.query}&pageToken=${this.state.prevPageToken}`,
-    });
+  handlePreviousPageClick() {
+    const urlLink = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&type=video&part=snippet&maxResults=15&q=${this.state.query}&pageToken=${this.state.prevPageToken}`;
+    this.fetchData(urlLink);
   }
-  handleQueryState(queryStr) {
+  handleSearchOnChange(queryStr) {
     const str = queryStr;
-    console.log(str);
+
     this.setState({ query: str });
-    this.setState({
-      url: `https://www.googleapis.com/youtube/v3/search?key=AIzaSyA7czYe075wnp3HGBgQlk6knPkQZmyoYb4&type=video&part=snippet&maxResults=15&q=${str}&pageToken=`,
-    });
+
+    const urlLink = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&type=video&part=snippet&maxResults=15&q=${str}&pageToken=`;
+    this.fetchData(urlLink);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.url !== this.state.url) {
-      this.fetchData();
+  async fetchData(urlLink) {
+    try {
+      const apiData = await fetch(urlLink);
+      const apiJson = await apiData.json();
+      const { items, nextPageToken, prevPageToken } = apiJson;
+      const prevPageTokenCheck = prevPageToken ? prevPageToken : "";
+      this.setState({
+        nextPageToken: nextPageToken,
+        prevPageToken: prevPageTokenCheck,
+        items: [...items],
+      });
+    } catch (error) {
+      console.error(error);
     }
-  }
-  fetchData() {
-    fetch(this.state.url)
-      .then((res) => res.json())
-      .then((data) => {
-        const newState = data.items;
-        this.setState({ nextPageToken: data.nextPageToken });
-        data.prevPageToken
-          ? this.setState({ prevPageToken: data.prevPageToken })
-          : this.setState({ prevPageToken: "" });
-        this.setState({ ytApiData: [...newState] });
-      })
-      .catch((error) => console.log(error));
   }
 
   render() {
     return (
       <>
-        <SearchBar handlestate={this.handleQueryState} />
+        <SearchBar handleSearchOnChange={this.handleSearchOnChange} />
         <Pagination
-          nextToken={this.setStateNextToken}
-          prevToken={this.setStatePrevToken}
+          handleNextPageClick={this.handleNextPageClick}
+          handlePreviousPageClick={this.handlePreviousPageClick}
         />
-        <List listData={this.state.ytApiData} />
+        <List listData={this.state.items} />
       </>
     );
   }

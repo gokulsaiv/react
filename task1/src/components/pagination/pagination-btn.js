@@ -1,16 +1,11 @@
 import React from "react";
 import './styles.css';
-export default function Pagination(props){
-    function handleNextState(){
-        props.nextToken()
-    }
-    function hanglePreviousState(){
-        props.prevToken()
-    }
+export default function Pagination({handlePreviousPageClick,handleNextPageClick}){
+   
     return(
         <>
-        <button className="previous" onClick={hanglePreviousState}> previous</button>
-        <button className="next" onClick={handleNextState}>Next </button>
+        <button className="previous" onClick={handlePreviousPageClick}> previous</button>
+        <button className="next" onClick={handleNextPageClick}>Next </button>
         </>
     )
 }
